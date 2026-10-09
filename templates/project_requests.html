@@ -74,28 +74,37 @@
               </div>
             </div>
 
-            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-              <span style="padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase;
-                {% if req['status'] == 'pending' %} background: #fef3c7; color: #92400e;
-                {% elif req['status'] == 'accepted' %} background: #d1fae5; color: #065f46;
-                {% else %} background: #fee2e2; color: #991b1b; {% endif %}">
-                {{ req['status'] }}
-              </span>
+             <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+               <span style="padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase;
+                  {% if req['status'] == 'pending' %} background: #fef3c7; color: #92400e;
+                  {% elif req['status'] == 'accepted' %} background: #d1fae5; color: #065f46;
+                  {% else %} background: #fee2e2; color: #991b1b; {% endif %}">
+                  {{ req['status'] }}
+               </span>
 
               {% if req['status'] == 'pending' %}
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                  ...Accept / Reject forms (unchanged)...
-                </div>
+                 <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <form action="{{ url_for('accept_request', request_id=req['id']) }}" method="POST" style="margin: 0;">
+                       <button type="submit" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                        Accept
+                       </button>
+                   </form>
+                   <form action="{{ url_for('reject_request', request_id=req['id']) }}" method="POST" style="margin: 0;">
+                        <button type="submit" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                            Reject
+                       </button>
+                   </form>
+                 </div>
               {% endif %}
 
               {% if req['status'] == 'accepted' %}
-                <form action="{{ url_for('remove_member', request_id=req['id']) }}" method="POST"
+                  <form action="{{ url_for('remove_member', request_id=req['id']) }}" method="POST"
                       style="margin: 0;" onsubmit="return confirm('Remove this member from the project?');">
-                  <button type="submit" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
-                    Remove
-                  </button>
-                </form>
-              {% endif %}
+                   <button type="submit" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                         Remove
+                   </button>
+                  </form>
+               {% endif %}
             </div>
 
           </div>
