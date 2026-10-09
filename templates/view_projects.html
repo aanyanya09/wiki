@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fixed to match database key: project_name -->
+  <title>{{ project['project_name'] }} - Project Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Fixed to match database key: project_name -->
+    <h1>{{ project['project_name'] }}</h1>
+    
+    <!-- Status Badge Logic Mapping (0=Open, 1=In Progress, 2=Completed) -->
+    <span class="badge">
+      {% if project['project_status'] == 0 %}
+        Open
+      {% elif project['project_status'] == 1 %}
+        In Progress
+      {% else %}
+        Completed
+      {% endif %}
+    </span>
+
+    <div class="section">
+      <h3>Description</h3>
+      <!-- Fixed to match database key: project_description -->
+      <p>{{ project['project_description'] }}</p>
+    </div>
+
+    <div class="section">
+      <h3>Skills Required</h3>
+      <!-- Fixed to match database key: skills_needed -->
+      {% if project['skills_needed'] %}
+        {% for skill in project['skills_needed'].split(',') %}
+          <span class="skill-tag">{{ skill.strip() }}</span>
+        {% endfor %}
+      {% else %}
+        <span class="text-muted">No specific skills listed</span>
+      {% endif %}
+    </div>
+
+    <div class="section">
+      <h3>Project Information</h3>
+      <div class="info-grid">
+        <!-- user_id is available from the projects table -->
+        <p><strong>Owner ID:</strong> {{ project['user_id'] }}</p>
+        <!-- Fixed to match database key: total_member_required -->
+        <p><strong>Team size needed:</strong> {{ project['total_member_required'] }} positions</p>
+      </div>
+    </div>
+
+    <!-- Fixed to use contact_link as the link variable -->
+    {% if project['contact_link'] %}
+    <div class="section">
+      <h3>Contact / Repository Link</h3>
+      <a href="{{ project['contact_link'] }}" target="_blank">{{ project['contact_link'] }}</a>
+    </div>
+    {% endif %}
+
+    <div class="actions">
+            {% if project["user_id"] == session["user_id"] %}
+               {% if project['update_count'] < 3 %}
+                 <a href="{{ url_for('edit_project', project_id=project['id']) }}"
+                     style="background:#16a34a; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-size:14px;">
+                     Update project ({{ 3 - project['update_count'] }} left)
+                 </a>
+               {% else %}
+                     <span style="opacity:.6;">Update limit reached</span>
+               {% endif %}
+                     <a href="{{ url_for('projects') }}" class="btn btn-secondary">← Back</a>
+            {% else %}
+                <form action="{{ url_for('request_join', project_id=project['id']) }}" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-primary">Request to Join</button>
+                </form>
+                <a href="{{ url_for('projects') }}" class="btn btn-secondary">← Back</a>
+            {% endif %}
+
+  </div>
+</body>
+</html>

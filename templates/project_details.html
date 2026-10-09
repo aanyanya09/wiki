@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Wiki</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+
+    </head>
+    <body>
+        
+  <div class="dashboard-grid">
+    
+    
+    <form class="workspace-card form-card" action="/project_details"  method="POST">
+        <span class="stage-tag">01 · DEPLOYMENT STAGE</span>
+        <h2>Configure New Project</h2>
+        <p class="form-subtitle">Fill in system parameters below to register the project configuration module.</p>
+        
+        <div class="form-layout-scroll">
+         
+            <div class="input-field-group">
+                <label for="project_name">Project Name</label>
+                <input type="text" id="project_name" name="project_name" placeholder="e.g., Engine Architecture Mesh" required>
+            </div>
+
+            
+            <div class="input-field-group">
+                <label for="project_desc">Description</label>
+                <textarea id="project_desc" name="project_description" placeholder="Enter specific roadmap milestone details or core technical objectives..." rows="3" required></textarea>
+            </div>
+
+        
+            <div class="input-field-group">
+                <div class="slider-header-split">
+                    <label for="project_status">Project Status</label>
+                    <span class="slider-badge-val" id="status-display" >50%</span>
+                </div>
+                <input type="range" id="project-status" name="project_status" min="0" max="100" value="50" step="1" oninput="document.getElementById('status-display').innerText = this.value + '%'">
+            </div>
+
+            
+            <div class="input-field-group">
+                <label for="project-skills">Skills Needed</label>
+                <input type="text" id="project-skills" name="skills_needed" placeholder="e.g., Python, CSS Grid, Flask, UI Design" required>
+            </div>
+
+   
+            <div class="input-field-group">
+                <label for="total-members">Total Members Required</label>
+                <input type="number" id="total-members" name="total_member_required"  min="1" max="50" placeholder="e.g., 5" required>
+            </div>
+
+           
+            <div class="input-field-group">
+                <label for="contact-url">Contact Link (LinkedIn)</label>
+                <div class="url-input-capsule">
+                    <span class="url-prefix">in/</span>
+                    <input type="url" id="contact-url" name="contact_link" placeholder="https://linkedin.com/in/yourname" required>
+                </div>
+            </div>
+        </div>
+
+  
+        <button type="submit" class="form-submit-btn">Initialize Project Module &nbsp; →</button>
+    </form>
+
+  </div>
+ </body>
+</html>

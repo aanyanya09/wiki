@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="description" content="...">
+        <meta name="robots" content="index, follow">
+        <title>wiki-pro</title>
+    </head>
+    <body>
+     <main class="landing">
+
+     <section class="mission-hero">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-green"></span>
+      <span class="dot dot-blue"></span>
+
+      <img class="hero-logo" src="{{ url_for('static', filename='wikiclub_logo.png') }}" width="500" alt="Wikiclub logo">
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#c62828" stroke-width="5"
+                stroke-dasharray="60 178.8" transform="rotate(-135 50 50)"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#2f5fa8" stroke-width="5"
+                stroke-dasharray="140 98.8" transform="rotate(-35 50 50)"/>
+        <circle cx="50" cy="50" r="24" fill="#3d8b5e"/>
+        <ellipse cx="50" cy="50" rx="10" ry="24" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>
+        <line x1="26" y1="50" x2="74" y2="50" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>
+      </svg>
+
+      <p class="hero-eyebrow"><strong>WIKICLUBTECH-UU • 2026–27</strong></p>
+      <h1>Our Mission, Our People</h1>
+      <p class="hero-sub"><strong>
+        More than a team page — discover the people, story, and
+        community behind Wikiclubtech-UU.
+      </strong></p>
+    </section>
+
+      <form action="/login" method="POST">
+        <h3><bold>LOGIN</bold></h3>
+        <div class="hero">
+               <label for="username">Username:</label>
+               <input type="text" id="username" name="username" placeholder="Enter your name...">
+        </div>
+        <div class="hero">
+                <label for="password">password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password...">
+        </div>
+        
+        <button type="submit" class="login-btn">Login</button>
+        
+        <div class="register-link">
+            <p>Don't have an account?<a href="/register">Register here</a></p>
+        </div>
+        
+      </form>
+    </body>
+</html>

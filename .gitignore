@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Secrets
+.env
+
+# Editor settings
+.vscode/
+
+# Local database (contains user data)
+wiki_database.db
+__pycache__/
+*.pyc
+make_admin.py
+check_users.py
+ee.py
+delete_user.py

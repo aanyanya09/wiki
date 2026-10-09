@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Members</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <aside class="sidebar">
+        <div class="brand">
+           <img src="{{ url_for('static', filename='WikiClub_logo.png') }}" alt="Wikiclub logo">
+        </div>
+        <div class="nav-group">
+            <span class="group-title">WORKSPACE</span>
+            <a href="{{ url_for('dashboard') }}" class="nav-item">workspace <span class="badge count-mute">{{ project_count }}</span></a>
+            <a href="{{ url_for('members') }}" class="nav-item active">Members <span class="badge">{{ member_count }}</span></a>
+        </div>
+          {% if current_user %}
+          <div class="user-profile">
+            <div class="avatar avatar-initial">{{ current_user['username'][0]|upper }}</div>
+            <div class="user-info">
+                <h4>{{ current_user['username'] }}</h4>
+                <span class="role-badge">{{ current_user['role']|upper }}</span>
+            </div>
+            <span class="online-status"></span>
+        </div>
+        {% endif %}
+        <div class="sidebar-actions" style="padding-top:20px;">
+            <a href="/logout" style="color:#ff4d4d;text-decoration:none;font-weight:bold;font-size:14px;">🚪 Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>WIKI-Workspace</h1>
+                <p>people you can collaborate with.</p>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('dashboard') }}" class="toggle-btn">workspace</a>
+                <a href="{{ url_for('members') }}" class="toggle-btn active">Members</a>
+            </div>
+        </header>
+
+        <div class="content-meta"><h2>Members <span>{{ users|length }} registered</span></h2></div>
+        
+        {% with messages = get_flashed_messages() %}
+          {% for m in messages %}<div class="flash-msg">{{ m }}</div>{% endfor %}
+        {% endwith %}
+
+        <div class="dashboard-grid">
+            {% for u in users %}
+            <section class="workspace-card" style="border-left:4px solid #49AA79;">
+                <span class="stage-tag">{{ u['role'] or 'MEMBER' }}</span>
+                <h2>
+                     {{ u['username'] }}
+                     {% if u['is_online'] %}<span class="online-dot" title="Online"></span>{% endif %}
+                </h2>
+                <p>Skills: {{ u['skills'] }}</p>
+                <p style="margin-top:8px;">Experience: {{ u['experience_level']}}</p>
+                 {% if current_user and current_user['role'] == 'admin'
+                      and u['id'] != current_user['id'] and u['role'] != 'admin' %}
+                  <form action="{{ url_for('admin_delete_member', member_id=u['id']) }}" method="POST"
+                        style="margin-top:10px;" onsubmit="return confirm('Delete this member permanently?');">
+                    <button type="submit" class="btn btn-secondary" style="color:#ff4d4d;">Delete member</button>
+                  </form>
+                {% endif %}
+                {% if current_user and current_user['role'] == 'admin' and u['id'] != current_user['id'] %}
+                   <form action="{{ url_for('toggle_admin', member_id=u['id']) }}" method="POST"
+                                 style="margin-top:10px;"
+                               onsubmit="return confirm('Change admin status for this member?');">
+                             <button type="submit" class="btn btn-secondary">
+                                    {% if u['role'] == 'admin' %}Remove admin{% else %}Make admin{% endif %}
+                     </button>
+                   </form>
+                {% endif %}
+            </section>
+            {% else %}
+            <section class="workspace-card" style="grid-column: span 2; text-align:center; opacity:.6;">
+                <h2>No members yet</h2>
+            </section>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+</body>
+</html>

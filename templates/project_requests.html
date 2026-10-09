@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Requests - {{ project['project_name'] }}</title>
+      <title>Wiki - My Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+<div class="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand">
+           <img src="{{ url_for('static', filename='WikiClub_logo.png') }}" alt="Wikiclub logo">
+        </div>
+      {% if current_user %}
+      <div class="user-profile">
+        <div class="avatar avatar-initial">{{ current_user['username'][0]|upper }}</div>
+        <div class="user-info">
+              <h4>{{ current_user['username'] }}</h4>
+              <span class="role-badge">{{ current_user['role']|upper }}</span>
+        </div>
+        <span class="online-status"></span>
+       </div>
+       {% endif %}
+        <div class="sidebar-actions" style="padding: 20px 0;">
+            <a href="/logout" style="color:#ff4d4d; text-decoration:none; font-weight:bold; font-size:14px;">🚪 Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>My Requests</h1>
+                <p>Track the projects you asked to join.</p>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('dashboard') }}" class="toggle-btn">workspace</a>
+                <a href="{{ url_for('projects') }}" class="toggle-btn">Projects</a>
+                <a href="{{ url_for('members') }}" class="toggle-btn">Members</a>
+                <a href="{{ url_for('my_requests') }}" class="toggle-btn active">My Requests</a>
+            </div>
+        </header>
+    
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div style="background:#d1fae5; color:#065f46; padding:12px; border-radius:6px; margin-bottom:16px; font-weight: 500;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      {% for req in requests %}
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+            
+            <div>
+              <h3 style="margin: 0; font-size: 18px; color: #1f2937;">{{ req['username'] }}</h3>
+              <p style="margin: 4px 0 12px 0; color: #4b5563; font-size: 14px;">📧 {{ req['email'] }}</p>
+              
+              <div style="margin-bottom: 8px;">
+                <strong style="font-size: 13px; color: #6b7280; text-transform: uppercase;">Experience Level:</strong>
+                <span style="font-size: 14px; color: #1f2937;">{{ req['experience_level'] or 'Not specified' }}</span>
+              </div>
+              
+              <div>
+                <strong style="font-size: 13px; color: #6b7280; text-transform: uppercase;">Skills:</strong>
+                <span style="font-size: 14px; color: #1f2937;">{{ req['skills'] or 'Not specified' }}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+              <span style="padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase;
+                {% if req['status'] == 'pending' %} background: #fef3c7; color: #92400e;
+                {% elif req['status'] == 'accepted' %} background: #d1fae5; color: #065f46;
+                {% else %} background: #fee2e2; color: #991b1b; {% endif %}">
+                {{ req['status'] }}
+              </span>
+
+              {% if req['status'] == 'pending' %}
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                  ...Accept / Reject forms (unchanged)...
+                </div>
+              {% endif %}
+
+              {% if req['status'] == 'accepted' %}
+                <form action="{{ url_for('remove_member', request_id=req['id']) }}" method="POST"
+                      style="margin: 0;" onsubmit="return confirm('Remove this member from the project?');">
+                  <button type="submit" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                    Remove
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+
+      {% if not requests %}
+        <div style="text-align: center; padding: 40px; background: #f9fafb; border: 2px dashed #e5e7eb; border-radius: 8px; color: #6b7280;">
+          <h3>No applications yet</h3>
+          <p style="margin-top: 4px;">When other members ask to join this project, their profiles will show up here.</p>
+        </div>
+      {% endif %}
+    </div>
+    </main>
+
+  </div>
+</body>
+</html>

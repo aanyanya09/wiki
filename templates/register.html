@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+
+    <div>
+        <h1 style="text-align: center; margin-top: 40px; margin-bottom: 10px;">CREATE ACCOUNT</h1>
+        <h2 style="text-align: center; margin-bottom: 30px;">Join us today!</h2>
+        {% with messages = get_flashed_messages() %}
+              {% for m in messages %}<p style="color:#ff4d4d; text-align:center;">{{ m }}</p>{% endfor %}
+        {% endwith %}
+
+        <form action="/register" method="POST">
+         
+            <div class="hero">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email..." required>
+            </div>
+
+         
+            <div class="hero">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Create a username..." required>
+            </div>
+
+     
+            <div class="hero">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Create a password..." required>
+            </div>
+
+           
+            <div class="hero">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Repeat your password..." required>
+            </div>
+
+            <div class="hero">
+                <label for="role">Role</label>
+                <select name="role" id="role" required>
+                    <option value="Developer">Developer</option>
+                    <option value="Designer">Designer</option>
+                    <option value="Student">Student</option>
+                    <option value="Mentor">Mentor</option>
+                </select>
+            </div>
+
+            <div class="hero">
+                <label for="skills">Skills</label>
+                <input type="text" id="skills" name="skills" required>
+            </div>
+
+            <div class="hero">
+                <label for="experience_level">Experience level</label>
+                <select name="experience_level" id="experience_level" required>
+                     <option value="Beginner">Beginner</option>
+                     <option value="Intermediate">Intermediate</option>
+                     <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+
+            <!-- <div class="hero">
+                    <label for="Github-url">Github-url:</label>
+    
+                    <input 
+                         type="url" 
+                         id="category-url" 
+                         name="category_url" 
+                         required
+    >
+            </div> -->
+
+         
+            <button type="submit" class="login-btn">Register</button>
+
+            
+            <div class="register-link">
+                <p>Already have an account? <a href="/">Login here</a></p>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

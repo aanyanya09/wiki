@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Edit Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <aside class="sidebar">
+        <div class="brand">
+           <img src="{{ url_for('static', filename='WikiClub_logo.png') }}" alt="Wikiclub logo">
+        </div>
+        <div class="nav-group">
+            <span class="group-title">WORKSPACE</span>
+            <a href="{{ url_for('dashboard') }}" class="nav-item active">workspace <span class="badge count-mute">{{ project_count }}</span></a>
+            <a href="{{ url_for('members') }}" class="nav-item">Members <span class="badge">{{ member_count }}</span></a>
+        </div>
+        {% if current_user %}
+        <div class="user-profile">
+            <div class="avatar avatar-initial">{{ current_user['username'][0]|upper }}</div>
+            <div class="user-info">
+                <h4>{{ current_user['username'] }}</h4>
+                <span class="role-badge">{{ current_user['role']|upper }}</span>
+            </div>
+            <span class="online-status"></span>
+        </div>
+        {% endif %}
+        <div class="sidebar-actions" style="padding-top:20px;">
+            <a href="/logout" style="color:#ff4d4d;text-decoration:none;font-weight:bold;font-size:14px;">🚪 Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>WIKI-Workspace</h1>
+                <p>update your project details.</p>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('dashboard') }}" class="toggle-btn active">workspace</a>
+                <a href="{{ url_for('members') }}" class="toggle-btn">Members</a>
+            </div>
+        </header>
+
+        <div class="content-meta"><h2>Edit Project <span>{{ project['project_name'] }}</span></h2></div>
+
+        {% with messages = get_flashed_messages() %}
+          {% for m in messages %}<p style="color:#49AA79;font-weight:bold;">{{ m }}</p>{% endfor %}
+        {% endwith %}
+
+        <div class="dashboard-grid">
+            <section class="workspace-card" style="border-left:4px solid #49AA79; grid-column: span 2;">
+                <p style="margin-bottom:16px;">Updates remaining: <strong>{{ remaining }}</strong> of 3</p>
+                <form method="POST" action="{{ url_for('edit_project', project_id=project['id']) }}">
+                    <p style="margin-bottom:6px;"><strong>Skills needed</strong></p>
+                    <input type="text" name="skills_needed"
+                           value="{{ project['skills_needed'] }}" required
+                           style="width:100%;padding:10px;margin-bottom:16px;box-sizing:border-box;">
+
+                                        <p style="margin-bottom:6px;"><strong>Total members required</strong></p>
+                    <input type="number" name="total_member_required" min="1"
+                           value="{{ project['total_member_required'] }}" required
+                           style="width:100%;padding:10px;margin-bottom:20px;box-sizing:border-box;">
+
+                    <button type="submit" class="toggle-btn active">Update</button>
+                    <a href="{{ url_for('dashboard') }}" class="toggle-btn">Cancel</a>
+                </form>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

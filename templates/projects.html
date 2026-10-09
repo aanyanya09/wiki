@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Wiki - Explore Projects</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand">
+           <img src="{{ url_for('static', filename='WikiClub_logo.png') }}" alt="Wikiclub logo">
+        </div>
+
+        {% if current_user %}
+        <div class="user-profile">
+            <div class="avatar avatar-initial">{{ current_user['username'][0]|upper }}</div>
+            <div class="user-info">
+                <h4>{{ current_user['username'] }}</h4>
+                <span class="role-badge">{{ current_user['role']|upper }}</span>
+            </div>
+            <span class="online-status"></span>
+        </div>
+        {% endif %}
+
+        <div class="sidebar-actions" style="padding: 20px 0;">
+            <a href="/logout" style="color: #ff4d4d; text-decoration: none; font-weight: bold; font-size: 14px; display: block;">
+                🚪 Log Out
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div style="background:#e0e7ff; color:#3730a3; padding:10px 14px; border-radius:6px; margin-bottom:12px;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Explore Directory</h1>
+                <p>Search active projects and request connections.</p>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('dashboard') }}" class="toggle-btn">Workspace</a>
+                <a href="{{ url_for('projects') }}" class="toggle-btn active">Projects</a>
+                <a href="{{ url_for('members') }}" class="toggle-btn">Members</a>
+                <a href="{{ url_for('my_requests') }}" class="toggle-btn">My Requests</a>
+                <input id="search" type="search" placeholder="Search projects..." aria-label="Search projects">
+            </div>
+        </header>
+
+        <div class="content-meta">
+            <h2>All Open Projects <span>{{ projects|length }} active</span></h2>
+        </div>
+
+        <div class="dashboard-grid" id="projects-grid">
+            {% for project in projects %}
+            <section class="workspace-card project-display-card" style="border-left: 4px solid #4f46e5;">
+                <span class="stage-tag">PROJECT ENTRY</span>
+                <h2>{{ project['project_name'] }}</h2>
+                <p style="margin-top: 8px; font-weight: bold; color: #555;">Required: {{ project['skills_needed'] }}</p>
+                <!-- <p style="margin-top: 8px; margin-bottom: 16px;">{{ project['project_description'] }}</p>
+
+                <div style="font-size: 13px; color: #777; margin-bottom: 16px;">
+                    <span>👥 Members Needed: {{ project['total_member_required'] }}</span>
+                </div> -->
+
+                <!-- <div style="display: flex; gap: 10px; align-items: center;">
+                    {% if project['contact_link'] %}
+                        <a href="{{ project['contact_link'] }}" target="_blank" class="card-link">Project Creator →</a>
+                    {% endif %}
+
+                    {% if project['user_id'] == session['user_id'] %}
+                        <a href="{{ url_for('project_requests', project_id=project['id']) }}"
+                           style="background:#16a34a; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-size:14px;">
+                            View Requests
+                        </a>
+                    {% else %}
+                        <form action="{{ url_for('request_join', project_id=project['id']) }}" method="POST" style="margin: 0;">
+                            <button type="submit" style="background:#4f46e5; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">
+                                Request to Join
+                            </button>
+                        </form>
+                    {% endif %}
+                </div> -->
+                
+                  <div style="margin-top: 16px; display: flex; gap: 10px;">
+                    <a href="{{ url_for('view_project', project_id=project['id']) }}" 
+                       style="background:#4f46e5; color:white; border:none; padding:8px 16px; border-radius:4px; text-decoration:none; font-size:14px; font-weight:500; cursor:pointer; display:inline-block;">
+                        View Details
+                    </a>
+                </div>
+                
+            </section>
+            {% endfor %}
+
+            {% if not projects %}
+            <section class="workspace-card" style="grid-column: span 2; text-align: center; opacity: 0.6;">
+                <h2>No boards found</h2>
+                <p>Your team workspace database is currently empty.</p>
+            </section>
+            {% endif %}
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

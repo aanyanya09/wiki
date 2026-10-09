@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Wiki - My Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+<div class="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand">
+           <img src="{{ url_for('static', filename='WikiClub_logo.png') }}" alt="Wikiclub logo">
+        </div>
+      {% if current_user %}
+      <div class="user-profile">
+        <div class="avatar avatar-initial">{{ current_user['username'][0]|upper }}</div>
+        <div class="user-info">
+              <h4>{{ current_user['username'] }}</h4>
+              <span class="role-badge">{{ current_user['role']|upper }}</span>
+        </div>
+        <span class="online-status"></span>
+       </div>
+       {% endif %}
+        <div class="sidebar-actions" style="padding: 20px 0;">
+            <a href="/logout" style="color:#ff4d4d; text-decoration:none; font-weight:bold; font-size:14px;">🚪 Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>My Requests</h1>
+                <p>Track the projects you asked to join.</p>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('dashboard') }}" class="toggle-btn">workspace</a>
+                <a href="{{ url_for('projects') }}" class="toggle-btn">Projects</a>
+                <a href="{{ url_for('members') }}" class="toggle-btn">Members</a>
+                <a href="{{ url_for('my_requests') }}" class="toggle-btn active">My Requests</a>
+            </div>
+        </header>
+
+        <div class="content-meta">
+            <h2>Join Requests <span>{{ requests|length }} total</span></h2>
+        </div>
+
+        <div class="requests-list">
+            {% for r in requests %}
+            <section class="request-card status-{{ r['status'] }}">
+                <div class="request-info">
+                    <h3>{{ r['project_name'] }}</h3>
+                    {% if r['status'] == 'accepted' and r['contact_link'] %}
+                        <a href="{{ r['contact_link'] }}" target="_blank" class="card-link">Contact the creator →</a>
+                    {% elif r['status'] == 'pending' %}
+                        <p class="request-hint">Waiting for the project owner to respond.</p>
+                    {% elif r['status'] == 'rejected' %}
+                        <p class="request-hint">This request was not accepted.</p>
+                    {% endif %}
+                </div>
+
+                <span class="status-badge badge-{{ r['status'] }}">
+                    {% if r['status'] == 'accepted' %}✅ Accepted
+                    {% elif r['status'] == 'rejected' %}❌ Rejected
+                    {% else %}⏳ Pending{% endif %}
+                </span>
+            </section>
+            {% else %}
+            <section class="workspace-card" style="text-align:center; opacity:0.6;">
+                <h2>No requests yet</h2>
+                <p>Browse <a href="{{ url_for('projects') }}">projects</a> and click "Request to Join".</p>
+            </section>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+</body>
+</html>
